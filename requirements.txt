@@ -5,11 +5,9 @@ pymysql>=1.1.0
 psycopg2-binary>=2.9.9
 redis>=5.0.1
 pymongo>=4.6.0
-poplib
 colorama>=0.4.6
 tqdm>=4.66.0
 socks>=1.7.1
 pysocks>=1.7.1
-pycryptodome
 openvpnclient
 pyyaml>=6.0
