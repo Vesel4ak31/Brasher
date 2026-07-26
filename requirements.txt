@@ -7,7 +7,6 @@ redis>=5.0.1
 pymongo>=4.6.0
 colorama>=0.4.6
 tqdm>=4.66.0
-socks>=1.7.1
 pysocks>=1.7.1
 openvpnclient
 pyyaml>=6.0
