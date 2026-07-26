@@ -8,5 +8,5 @@ pymongo>=4.6.0
 colorama>=0.4.6
 tqdm>=4.66.0
 pysocks>=1.7.1
-openvpnclient
+python-openvpn-client
 pyyaml>=6.0
