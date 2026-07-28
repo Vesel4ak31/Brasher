@@ -1,4 +1,5 @@
 # Brasher
+
 <img width="908" height="208" alt="изображение" src="https://github.com/user-attachments/assets/bccf26f7-7e24-4dec-adc0-643a2a7ee06d" />
 
 Brasher is a free dictionary-based brute-force attack tool written in Python. It can test 10 protocols and perform post-exploitation, including executing arbitrary code on a machine, running an arbitrary exploit from a file, and downloading and uploading files. Shell mode is also supported for some protocols. When testing SSH, after obtaining login credentials, you can also attempt to gain persistence in the system by specifying the --persist flag.
