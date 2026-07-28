@@ -1,7 +1,9 @@
 # Brasher
+<img width="908" height="208" alt="изображение" src="https://github.com/user-attachments/assets/bccf26f7-7e24-4dec-adc0-643a2a7ee06d" />
+
 Brasher is a free dictionary-based brute-force attack tool written in Python. It can test 10 protocols and perform post-exploitation, including executing arbitrary code on a machine, running an arbitrary exploit from a file, and downloading and uploading files. Shell mode is also supported for some protocols. When testing SSH, after obtaining login credentials, you can also attempt to gain persistence in the system by specifying the --persist flag.
 
-<img width="908" height="208" alt="изображение" src="https://github.com/user-attachments/assets/bccf26f7-7e24-4dec-adc0-643a2a7ee06d" />
+
 
 # Installation
 
@@ -148,7 +150,7 @@ To specify the OpenVPN username and a list of usernames, use the --open-vpn-user
 
 
 
-# Post-exploitation
+# Post exploitation
 
 Yes, Brasher can do that too. After receiving login credentials, you can specify multiple files for post-exploitation. You can simply specify --exec, and Brasher will send you the command output upon receipt, or you can specify --exploit, and simply select your file with commands to execute. You can also upload and download files to the target server. These features are only available for SSH, FTP, and SMB. You can download or upload any file. You can also enable shell mode. This feature is only available for SSH, FTP, and Telnet. This mode is essentially just an environment for processing your commands. Important: if you enter non-existent commands, shell mode may hang.
 Another cool feature is the --persist flag. This flag is only supported over SSH. When specified, Brasher will attempt to add your key to the SSH key authentication list and allow you to connect using your key. This mode has not yet been fully tested. In fact, Brasher offers excellent post-exploitation capabilities: you can perform RCE-like attacks and do anything you want. Here's an example of running Brasher with post-exploitation enabled:
@@ -207,11 +209,11 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE THEREOF.
 ```
 
-#About improving the tool
+# About improving the tool
 
 
 
 This tool is truly great. I plan to add a lot of new flags to put it on par with giants like Hydra. At a minimum, we plan to implement the --mutate flag to specify a target file containing various lines for changing logins and passwords. I think this will be very useful. I'd also like to add a --resume flag so that, like Hydra, you can pause and resume from a certain point after stopping.
 Another useful feature, in my opinion, is the introduction of a search mode for S3 storages. I've only seen this in the Gobuster tool and it's a really cool feature. Accordingly, since we are talking about web testing, it would be worth adding brute force authentication for web pages (for example, login.php). This would take the tool to the next level and allow it to become similar to Wfuzz or similar solutions. I'm also considering adding a --proxy-list flag to allow me to specify a list of proxies to test. Thus, when trying to crack passwords in web forms, you can use an HTTP proxy.
 To be honest, such a tool can be developed almost endlessly. You can add 200 new flags, but then their usefulness becomes questionable. I believe that my last suggestions are truly necessary. I hope this tool will be useful to someone. It tries passwords and usernames quite quickly thanks to multi-threading - this is its advantage. It can be run on powerful computers by opening multiple threads for maximum performance.
-Please, if you are a GitHub user, try this tool. I assure you, you won't regret it. I know the code is still pretty crude (as of 2026) and has a lot of bugs, but I'm trying to fix them. Most options are now safe to use: they all work, although some are still buggy. Try to find at least one online password cracking tool that provides such a flexible set of parameters for security testing. It would also be nice to add support for more protocols. Ideally, the number of testing options should reach 30–50.
+Please, if you are a GitHub user, try this tool. I assure you, you won't regret it. I know the code is still pretty crude (as of 2026) and has a lot of bugs, but I'm trying to fix them. Most options are now safe to use: they all work, although some are still buggy. Try to find at least one online password cracking tool that provides such a flexible set of parameters for security testing. It would also be nice to add support for more protocols. Ideally, the number of testing options should reach 30-50.
