@@ -876,8 +876,8 @@ class Brasher:
                 self.output = self.stdout.read().decode().rstrip()
 
                 if self.error:
-                    self.safe_print(self.render_text("ERR",Back.RED,f"shell mode error: {e}"))
-                    self.logging(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}] [ERROR] [{self.mode.upper()}] shell mode error: {e}")
+                    self.safe_print(self.render_text("ERR",Back.RED,f"shell mode error: {self.error.rstrip()}"))
+                    self.logging(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}] [ERROR] [{self.mode.upper()}] shell mode error: {self.error.rstrip()}")
 
                 self.logging(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}] [SHELL] [{self.mode.upper()}] command shell output: {self.output}")
 
